@@ -1,14 +1,14 @@
 ﻿using Grocery.Domain.Interfaces.Repositories;
 using Grocery.Application.Interfaces.Services;
 using Grocery.Domain.Entities;
-using Grocery.Domain.ValueObjects;
 
 namespace Grocery.Application.Services
 {
     /// <summary>
     /// Service responsible for managing product operations and business logic.
-    /// Provides comprehensive product management including categories, pricing, and expiration tracking.
+    /// Provides basic product management including stock operations.
     /// Follows HBO-ICT coding guidelines for service layer implementation.
+    /// Note: Category, pricing, and expiration features will be implemented in future sprints.
     /// </summary>
     public class ProductService : IProductService
     {
@@ -31,7 +31,7 @@ namespace Grocery.Application.Services
         }
 
         /// <summary>
-        /// Retrieves a specific product by its ID.
+        /// Retrieves a product by its unique identifier.
         /// </summary>
         /// <param name="id">The unique identifier of the product</param>
         /// <returns>The product if found; otherwise, null</returns>
@@ -45,22 +45,8 @@ namespace Grocery.Application.Services
         /// </summary>
         /// <param name="item">The product to add</param>
         /// <returns>The added product</returns>
-        /// <exception cref="ArgumentException">Thrown when product data is invalid</exception>
         public Product Add(Product item)
         {
-            // Validate product data according to business rules
-            if (item == null)
-                throw new ArgumentException("Product cannot be null", nameof(item));
-
-            if (string.IsNullOrWhiteSpace(item.Name))
-                throw new ArgumentException("Product name cannot be null or empty", nameof(item));
-
-            if (item.Stock < 0)
-                throw new ArgumentException("Product stock cannot be negative", nameof(item));
-
-            if (item.Price <= 0)
-                throw new ArgumentException("Product price must be greater than 0", nameof(item));
-
             return _productRepository.Add(item);
         }
 
@@ -68,12 +54,9 @@ namespace Grocery.Application.Services
         /// Updates an existing product in the repository.
         /// </summary>
         /// <param name="item">The product to update</param>
-        /// <returns>The updated product if successful; otherwise, null</returns>
+        /// <returns>The updated product if found; otherwise, null</returns>
         public Product? Update(Product item)
         {
-            if (item == null)
-                throw new ArgumentException("Product cannot be null", nameof(item));
-
             return _productRepository.Update(item);
         }
 
@@ -81,30 +64,15 @@ namespace Grocery.Application.Services
         /// Deletes a product from the repository.
         /// </summary>
         /// <param name="item">The product to delete</param>
-        /// <returns>The deleted product if successful; otherwise, null</returns>
+        /// <returns>The deleted product if found; otherwise, null</returns>
         public Product? Delete(Product item)
         {
-            if (item == null)
-                throw new ArgumentException("Product cannot be null", nameof(item));
-
             return _productRepository.Delete(item);
         }
 
         #endregion
 
         #region Business Logic Methods
-
-        /// <summary>
-        /// Retrieves all products in a specific category.
-        /// </summary>
-        /// <param name="category">The product category to filter by</param>
-        /// <returns>A list of products in the specified category</returns>
-        public List<Product> GetProductsByCategory(ProductCategory category)
-        {
-            return _productRepository.GetAll()
-                .Where(p => p.Category == category)
-                .ToList();
-        }
 
         /// <summary>
         /// Retrieves all products that are currently in stock.
@@ -129,47 +97,6 @@ namespace Grocery.Application.Services
         }
 
         /// <summary>
-        /// Retrieves all products that are expired or expiring soon.
-        /// </summary>
-        /// <param name="daysAhead">The number of days to check ahead for expiration (default: 7)</param>
-        /// <returns>A list of products that are expired or expiring soon</returns>
-        public List<Product> GetExpiringProducts(int daysAhead = 7)
-        {
-            return _productRepository.GetAll()
-                .Where(p => p.IsExpired || p.IsExpiringSoon(daysAhead))
-                .ToList();
-        }
-
-        /// <summary>
-        /// Retrieves all products within a specific price range.
-        /// </summary>
-        /// <param name="minPrice">The minimum price (inclusive)</param>
-        /// <param name="maxPrice">The maximum price (inclusive)</param>
-        /// <returns>A list of products within the specified price range</returns>
-        public List<Product> GetProductsByPriceRange(decimal minPrice, decimal maxPrice)
-        {
-            if (minPrice < 0)
-                throw new ArgumentException("Minimum price cannot be negative", nameof(minPrice));
-            
-            if (maxPrice < minPrice)
-                throw new ArgumentException("Maximum price cannot be less than minimum price", nameof(maxPrice));
-
-            return _productRepository.GetAll()
-                .Where(p => p.Price >= minPrice && p.Price <= maxPrice)
-                .ToList();
-        }
-
-        /// <summary>
-        /// Calculates the total value of all products in stock.
-        /// </summary>
-        /// <returns>The total value of all stock in euros</returns>
-        public decimal GetTotalStockValue()
-        {
-            return _productRepository.GetAll()
-                .Sum(p => p.GetStockValue());
-        }
-
-        /// <summary>
         /// Searches for products by name (case-insensitive).
         /// </summary>
         /// <param name="searchTerm">The term to search for in product names</param>
@@ -183,6 +110,9 @@ namespace Grocery.Application.Services
                 .Where(p => p.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
                 .ToList();
         }
+
+        // Note: Category, pricing, and expiration-related methods will be implemented in future sprints
+        // according to the design documentation (UC12, UC14, UC15)
 
         #endregion
     }

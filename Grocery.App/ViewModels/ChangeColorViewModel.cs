@@ -2,7 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using Grocery.Application.Interfaces.Services;
 using Grocery.Domain.Entities;
-using Grocery.Core.Services;
+using Grocery.App.Services;
 
 namespace Grocery.App.ViewModels
 {

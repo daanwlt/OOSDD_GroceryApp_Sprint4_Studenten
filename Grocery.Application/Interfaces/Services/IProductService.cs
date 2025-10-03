@@ -1,12 +1,12 @@
 ﻿using Grocery.Domain.Entities;
-using Grocery.Domain.ValueObjects;
 
 namespace Grocery.Application.Interfaces.Services
 {
     /// <summary>
     /// Interface for product service operations.
-    /// Defines the contract for product management including categories, pricing, and expiration tracking.
+    /// Defines the contract for basic product management including stock operations.
     /// Follows HBO-ICT coding guidelines for interface design and service contracts.
+    /// Note: Category, pricing, and expiration features will be implemented in future sprints.
     /// </summary>
     public interface IProductService
     {
@@ -51,13 +51,6 @@ namespace Grocery.Application.Interfaces.Services
         #region Business Logic Methods
 
         /// <summary>
-        /// Retrieves all products in a specific category.
-        /// </summary>
-        /// <param name="category">The product category to filter by</param>
-        /// <returns>A list of products in the specified category</returns>
-        List<Product> GetProductsByCategory(ProductCategory category);
-
-        /// <summary>
         /// Retrieves all products that are currently in stock.
         /// </summary>
         /// <returns>A list of products that are in stock</returns>
@@ -70,32 +63,14 @@ namespace Grocery.Application.Interfaces.Services
         List<Product> GetOutOfStockProducts();
 
         /// <summary>
-        /// Retrieves all products that are expired or expiring soon.
-        /// </summary>
-        /// <param name="daysAhead">The number of days to check ahead for expiration (default: 7)</param>
-        /// <returns>A list of products that are expired or expiring soon</returns>
-        List<Product> GetExpiringProducts(int daysAhead = 7);
-
-        /// <summary>
-        /// Retrieves all products within a specific price range.
-        /// </summary>
-        /// <param name="minPrice">The minimum price (inclusive)</param>
-        /// <param name="maxPrice">The maximum price (inclusive)</param>
-        /// <returns>A list of products within the specified price range</returns>
-        List<Product> GetProductsByPriceRange(decimal minPrice, decimal maxPrice);
-
-        /// <summary>
-        /// Calculates the total value of all products in stock.
-        /// </summary>
-        /// <returns>The total value of all stock in euros</returns>
-        decimal GetTotalStockValue();
-
-        /// <summary>
         /// Searches for products by name (case-insensitive).
         /// </summary>
         /// <param name="searchTerm">The term to search for in product names</param>
         /// <returns>A list of products matching the search term</returns>
         List<Product> SearchProducts(string searchTerm);
+
+        // Note: Category, pricing, and expiration-related methods will be implemented in future sprints
+        // according to the design documentation (UC12, UC14, UC15)
 
         #endregion
     }
