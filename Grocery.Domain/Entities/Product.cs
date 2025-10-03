@@ -19,8 +19,7 @@ namespace Grocery.Domain.Entities
         [Range(0, int.MaxValue, ErrorMessage = "Stock cannot be negative")]
         public int Stock { get; set; }
 
-        // Note: Price, Category, and BestBeforeDate properties will be implemented in future sprints
-        // according to the design documentation (UC12, UC14, UC15)
+        // Note: Additional properties can be implemented as needed
 
         /// <summary>
         /// Gets a value indicating whether the product is currently in stock.
@@ -32,8 +31,7 @@ namespace Grocery.Domain.Entities
         /// </summary>
         public bool IsOutOfStock => Stock == 0;
 
-        // Note: Expiration-related properties will be implemented in future sprints
-        // according to the design documentation (UC15)
+        // Note: Additional business logic methods can be implemented as needed
 
         #endregion
 
@@ -98,8 +96,7 @@ namespace Grocery.Domain.Entities
             return requestedAmount > 0 && Stock >= requestedAmount;
         }
 
-        // Note: Price, category, and expiration-related methods will be implemented in future sprints
-        // according to the design documentation (UC12, UC14, UC15)
+        // Note: Additional business logic methods can be implemented as needed
 
         #endregion
     }

@@ -16,7 +16,6 @@ namespace Grocery.Infrastructure.Data.Repositories
         public ProductRepository()
         {
             // Initialize products with basic information (only stock levels according to current design)
-            // Note: Categories, prices, and THT dates will be implemented in future sprints (UC12, UC14, UC15)
             products = [
                 new Product(1, "Melk", 300),
                 new Product(2, "Kaas", 100),

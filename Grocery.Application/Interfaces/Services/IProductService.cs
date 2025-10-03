@@ -69,8 +69,7 @@ namespace Grocery.Application.Interfaces.Services
         /// <returns>A list of products matching the search term</returns>
         List<Product> SearchProducts(string searchTerm);
 
-        // Note: Category, pricing, and expiration-related methods will be implemented in future sprints
-        // according to the design documentation (UC12, UC14, UC15)
+        // Note: Additional business logic methods can be implemented as needed
 
         #endregion
     }

@@ -111,8 +111,7 @@ namespace Grocery.Application.Services
                 .ToList();
         }
 
-        // Note: Category, pricing, and expiration-related methods will be implemented in future sprints
-        // according to the design documentation (UC12, UC14, UC15)
+        // Note: Additional business logic methods can be implemented as needed
 
         #endregion
     }
