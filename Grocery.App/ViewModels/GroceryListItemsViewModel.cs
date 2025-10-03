@@ -40,12 +40,47 @@ namespace Grocery.App.ViewModels
             GetAvailableProducts();
         }
 
+        /// <summary>
+        /// Gets available products for the current grocery list.
+        /// This method has been optimized for performance and readability to prevent runtime issues.
+        /// Includes search functionality with proper null handling.
+        /// </summary>
         private void GetAvailableProducts()
         {
             AvailableProducts.Clear();
-            foreach (Product p in _productService.GetAll())
-                if (MyGroceryListItems.FirstOrDefault(g => g.ProductId == p.Id) == null  && p.Stock > 0 && (searchText=="" || p.Name.ToLower().Contains(searchText.ToLower())))
-                    AvailableProducts.Add(p);
+            
+            // Get all products once to avoid repeated service calls
+            var allProducts = _productService.GetAll();
+            
+            // Create a HashSet of product IDs already in the grocery list for O(1) lookup
+            var existingProductIds = new HashSet<int>(
+                MyGroceryListItems.Select(item => item.ProductId)
+            );
+            
+            // Normalize search text once for performance
+            var normalizedSearchText = string.IsNullOrWhiteSpace(searchText) 
+                ? string.Empty 
+                : searchText.ToLowerInvariant();
+            
+            // Filter products with improved readability and performance
+            foreach (var product in allProducts)
+            {
+                // Check if product is not already in the grocery list
+                var isProductNotInList = !existingProductIds.Contains(product.Id);
+                
+                // Check if product has stock
+                var hasStock = product.Stock > 0;
+                
+                // Check if product matches search criteria (with null safety)
+                var matchesSearch = string.IsNullOrEmpty(normalizedSearchText) || 
+                                  (product.Name?.ToLowerInvariant().Contains(normalizedSearchText) ?? false);
+                
+                // Add product if all conditions are met
+                if (isProductNotInList && hasStock && matchesSearch)
+                {
+                    AvailableProducts.Add(product);
+                }
+            }
         }
 
         partial void OnGroceryListChanged(GroceryList value)
